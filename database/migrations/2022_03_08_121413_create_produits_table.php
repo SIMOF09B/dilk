@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('categorie_id')->onDeleteCascade();
             $table->string('desc');
             $table->float('prix');
-            $table->time('duree_preparation');
+            $table->integer('duree_preparation');
             $table->timestamps();
         });
     }
