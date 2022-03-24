@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Restaurant;
 use App\Http\Requests\StoreRestaurantRequest;
 use App\Http\Requests\UpdateRestaurantRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class RestaurantController extends Controller
 {
@@ -15,7 +18,9 @@ class RestaurantController extends Controller
      */
     public function index()
     {
-        //
+
+        $restaurant = Restaurant::all();
+        return view('backoffice.restaurant.index', ['restaurants' => $restaurant]);
     }
 
     /**
@@ -25,7 +30,7 @@ class RestaurantController extends Controller
      */
     public function create()
     {
-        //
+        return view('backoffice.restaurant.add');
     }
 
     /**
@@ -34,9 +39,19 @@ class RestaurantController extends Controller
      * @param  \App\Http\Requests\StoreRestaurantRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreRestaurantRequest $request)
+    public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string|max:25',
+            'adresse' => 'required',
+            'tele' => 'required'
+        ]);
+        Restaurant::create([
+            'name' => $request->name,
+            'adresse' => $request->adresse,
+            'tele' => $request->tele,
+        ]);
+        return redirect()->route('restaurant.index');
     }
 
     /**
@@ -45,9 +60,13 @@ class RestaurantController extends Controller
      * @param  \App\Models\Restaurant  $restaurant
      * @return \Illuminate\Http\Response
      */
-    public function show(Restaurant $restaurant)
+    public function show($restaurant)
     {
-        //
+
+        $rest = Restaurant::find($restaurant);
+        return view('backoffice.restaurant.show', [
+            'restaurant' => $rest
+        ]);
     }
 
     /**
@@ -56,9 +75,10 @@ class RestaurantController extends Controller
      * @param  \App\Models\Restaurant  $restaurant
      * @return \Illuminate\Http\Response
      */
-    public function edit(Restaurant $restaurant)
+    public function edit($id)
     {
-        //
+        $restaurant = Restaurant::find($id);
+        return view('backoffice.restaurant.edit', ['restaurant' => $restaurant]);
     }
 
     /**
@@ -68,9 +88,15 @@ class RestaurantController extends Controller
      * @param  \App\Models\Restaurant  $restaurant
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateRestaurantRequest $request, Restaurant $restaurant)
+    public function update(Request $request, $restaurants)
     {
-        //
+        Restaurant::find($restaurants)->update([
+            'name' => $request->name,
+            'adresse' => $request->adresse,
+            'tele' => $request->tele,
+
+        ]);
+        return redirect()->route('restaurant.index');
     }
 
     /**
@@ -79,8 +105,9 @@ class RestaurantController extends Controller
      * @param  \App\Models\Restaurant  $restaurant
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Restaurant $restaurant)
+    public function destroy($id)
     {
-        //
+        DB::table('restaurants')->where('id', $id)->delete();
+        return back();
     }
 }

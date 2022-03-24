@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Commande;
+use App\Models\Restaurant;
 use App\Http\Requests\StoreCommandeRequest;
 use App\Http\Requests\UpdateCommandeRequest;
 
@@ -14,8 +15,14 @@ class CommandeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        //
+    {   
+        $restaurant = Restaurant::all();
+        $commandes =  Commande::all();
+        return view('backoffice.commande.index',
+        [
+            'commandes' => $commandes,
+            'restaurants'=>$restaurant
+        ]);
     }
 
     /**
@@ -23,9 +30,10 @@ class CommandeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id)
     {
-        //
+        return view('backoffice.commande.add',['id'=>$id]);
+
     }
 
     /**
@@ -36,7 +44,7 @@ class CommandeController extends Controller
      */
     public function store(StoreCommandeRequest $request)
     {
-        //
+        
     }
 
     /**
@@ -47,7 +55,11 @@ class CommandeController extends Controller
      */
     public function show(Commande $commande)
     {
-        //
+        
+       $commd= Commande::find($commande);
+       return view('backoffice.commande.show',[
+           'commande' => $commd
+       ]);
     }
 
     /**
@@ -70,7 +82,25 @@ class CommandeController extends Controller
      */
     public function update(UpdateCommandeRequest $request, Commande $commande)
     {
-        //
+        
+        
+
+    }
+    public function update_etat(Commande $commande)
+    {
+        $newetat = '';
+        $etat = $commande->etat;
+        $etat == 'commande'?$newetat ='prepare':'';
+        $etat == 'prepare'?$newetat ='delivrer':'';
+        $etat == 'delivrer'?$newetat ='confirmer':'';
+        $etat == 'confirmer'?$newetat ='confirmer':'';
+
+        $commande->update([
+            'etat' => $newetat
+        ]);
+
+        return redirect()->back();
+
     }
 
     /**
@@ -79,8 +109,10 @@ class CommandeController extends Controller
      * @param  \App\Models\Commande  $commande
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Commande $commande)
+    public function destroy($commande)
     {
-        //
+        
+        Commande::find($commande)->delete();
+        return redirect()->back();
     }
 }
