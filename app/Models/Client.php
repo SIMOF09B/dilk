@@ -22,10 +22,10 @@ class Client extends Model
     }
     public function commande()
     {
-        return $this->hasOne(User::class);
+        return $this->hasMany(Commande::class);
     }
     public function produit()
     {
-        return $this->belongsToMany(Produit::class, 'pannels');
+        return $this->belongsToMany(Produit::class);
     }
 }

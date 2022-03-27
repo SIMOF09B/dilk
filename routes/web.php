@@ -41,7 +41,6 @@ Route::prefix('admin')->group(function () {
             Route::get('show/{id}', [RestaurantController::class, 'show'])->name('show');
         });
 
-
         // categories routes
         Route::prefix('categorie')->name('categorie.')->group(function () {
             Route::get('', [categorieController::class, 'index'])->name('index');
@@ -97,28 +96,22 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [Client_vController::class, 'index'])->name('show');
         Route::get('/update', [Client_vController::class, 'update'])->name('update');
         Route::post('edit', [Client_vController::class, 'edit'])->name('edit');
+        Route::get('orders', [Client_vController::class, 'order'])->name('order');
         
     });
 
     Route::get('/commande/{id}', [commande_vController::class, 'store'])->name('c_insert');
-
 });
 
 
     // produitsCard routes 
     Route::prefix('Restaurant')->name('produitC.')->group(function () {
-        Route::get('/{id}', [produit_vController::class, 'index'])->name('show');
+        Route::get('/{restaurant}/menu', [produit_vController::class, 'index'])->name('show');
     });
-    Route::get('/rest', [restaurant_vController::class, 'index'])->name('list');
+    Route::get('/Restaurant', [restaurant_vController::class, 'index'])->name('home');
     Route::get('/add_to_card/{produit}', [produit_vController::class,'AddToCart'])->name('AddToCart'); 
     Route::get('/delete_card', [produit_vController::class,'destroy'])->name('deleteCard');
-    Route::get('/restaurant/{restaurant}', [restaurant_vController::class,'show'])->name('rest.show');
+    Route::get('/Restaurant/{restaurant}/Review', [restaurant_vController::class,'show'])->name('rest.show');
 //end visitors routes
-
-
-Route::get('/', function () {
-    return view('welcome');
-});
 Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', function(){return view('welcome');});

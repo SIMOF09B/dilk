@@ -1,5 +1,10 @@
 @extends('layouts.app')
 @section('content')
+<section style="background-image: url(assets/images/menu-bg.png);"
+class="our-menu section bg-light repeat-img" id="menu">
+<div class="sec-wp">
+</div>
+<div class="container">
 @if($errors->any())
 <div class="alert alert-danger" role="alert">
     @foreach($errors->all() as $error)
@@ -26,7 +31,10 @@
     </div>
   </div>
 @endif
-<div class="card">
+<div class="card bg-light col-sm-9 m-auto mt-5">
+    <div class="card-header bg-warning text-light">
+        Profile
+    </div>
     <div class="card-body">
         <form action="{{route('authc.update')}}" method="post" enctype="multipart/form-data">
             @csrf
@@ -54,11 +62,12 @@
                 <button type="submit" class="btn btn-secondary">Enregistrer</button>
             </div>
             <div class="mb-3">
-                <a data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-link">Nouveau Mot de pass</a>
+                <a data-bs-toggle="modal" data-bs-target="#auth_edit" class="btn btn-link">Nouveau Mot de pass</a>
             </div>
             
         </form>
-        @include('visitors.client.edit')
     </div>
 </div>
+</div>
+</section>
 @endsection

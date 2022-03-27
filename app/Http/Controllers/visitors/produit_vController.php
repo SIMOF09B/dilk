@@ -12,19 +12,11 @@ use Illuminate\Support\Facades\View;
 class produit_vController extends Controller
 {
     
-    public function __construct() {
-
-        $shoppingCart = Cart::name('shopping');
-        View::share('card', $shoppingCart);
-    }
-    
-    public function index($rest_id)
+    public function index(Restaurant $restaurant)
     {
-        
-        $data =  Restaurant::find($rest_id);
         return view('visitors.produit.index',
         [
-            'data' => $data
+            'data' => $restaurant
         ]);
     
     }
@@ -36,6 +28,7 @@ class produit_vController extends Controller
     }
 
     public function AddToCart(Produit $produit) {
+
         $shoppingCart = Cart::name('shopping');
         $productItem  = $shoppingCart->addItem([
             'id'       => $produit->id,

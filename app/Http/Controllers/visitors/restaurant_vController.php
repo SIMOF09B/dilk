@@ -18,6 +18,7 @@ class restaurant_vController extends Controller
         ]);
     
     }
+    
     public function show(Restaurant $restaurant)
     {
         return view('visitors.rest_index',
